@@ -2,21 +2,39 @@
 
 ## Preferred long-term path
 
-Put this skill directory in a tiny git repo or any static-hosted raw URL, then install it into each profile with Hermes.
+Use the git repo as the canonical source, then either:
 
-Shape to publish:
+1. install from the repo-style identifier through Hermes, or
+2. run the helper script from a cloned checkout.
+
+Canonical repo layout:
 
 ```text
 <repo>/autonomous-ai-agents/hermes-publish-html/
   SKILL.md
   scripts/publish_html_page.py
+  references/...
 ```
 
-Then install into a target profile once the raw `SKILL.md` is reachable over HTTPS:
+### Option A: Hermes install from the repo identifier
 
 ```bash
-hermes --profile <profile-name> skills install https://raw.githubusercontent.com/RootMePLS/hermes-publish-html-skill/main/autonomous-ai-agents/hermes-publish-html/SKILL.md
+hermes --profile <profile-name> skills install RootMePLS/hermes-publish-html-skill/autonomous-ai-agents/hermes-publish-html --force
 ```
+
+Why `--force` is needed: this is a community skill with a real Python script, so Hermes scans the whole directory and currently produces a `caution` verdict for routine `os.environ` / profile-handling code. Community + caution is blocked unless forced.
+
+Why the raw `SKILL.md` URL is the wrong install target: Hermes treats direct URLs as **single-file skills only**. That path can install `SKILL.md`, but it will not fetch `scripts/` or `references/`, which makes this skill incomplete.
+
+### Option B: install from a local git checkout
+
+```bash
+git clone https://github.com/RootMePLS/hermes-publish-html-skill.git
+cd hermes-publish-html-skill
+./install-from-git.sh --profile <profile-name>
+```
+
+This path is the least magical one. It copies the full skill directory exactly as-is, which is what you want when the scanner is being dramatic.
 
 After install, make sure that target profile also has:
 - `HERMES_PUBLISH_GATEWAY_URL`
