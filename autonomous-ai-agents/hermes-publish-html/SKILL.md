@@ -53,9 +53,9 @@ The script:
 ## Required Environment
 
 One of these must provide the values:
-- environment variables in the current process
+- environment variables in the current Hermes process
 - the active profile `.env`
-- the root `~/.hermes/.env`
+- another trusted environment source already loaded before the script runs
 
 Required:
 - `HERMES_PUBLISH_GATEWAY_URL`
